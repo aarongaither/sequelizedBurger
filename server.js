@@ -21,6 +21,6 @@ app.use("/", burgerRoutes);
 app.use("/", customerRoutes);
 app.use(express.static("public"));
 
-db.sequelize.sync({force: true}).then(() => {
+db.sequelize.sync().then(() => {
 	app.listen(port, () => console.log(`Server listening: Port ${port}`));
 })
