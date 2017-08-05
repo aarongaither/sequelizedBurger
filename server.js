@@ -3,7 +3,9 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const path = require("path");
 const exphbs = require("express-handlebars");
-const routes = require("./controllers/burgers_controller.js");
+const htmlRoutes = require("./controllers/html_controller.js");
+const burgerRoutes = require("./controllers/burgers_controller.js");
+const customerRoutes = require("./controllers/customer_controller.js");
 const db = require("./models")
 const port = process.env.PORT || 3000;
 const app = express();
@@ -14,9 +16,11 @@ app.use(methodOverride("_method"));
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-app.use("/", routes);
+app.use("/", htmlRoutes);
+app.use("/", burgerRoutes);
+app.use("/", customerRoutes);
 app.use(express.static("public"));
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({force: true}).then(() => {
 	app.listen(port, () => console.log(`Server listening: Port ${port}`));
 })

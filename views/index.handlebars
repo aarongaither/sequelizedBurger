@@ -1,49 +1,100 @@
-  <div class="container">
-			<img class="main-img" src="assets/img/burger-outline-filled.png">
-			<h1 class="center-align">Eat Da Burger!</h1>
-	  <div class="row">
-	  	<div class="col s6">
-	  		<ul class="collection">
-	  		  {{#each burgers}}
-	  		    {{#unless this.devoured}}
-	  		      <li class="collection-item">
-		  		      <div class="row">
-	  		        	<h4 class="col s8">{{this.burger_name}}</h4>
-		  		        <form action="/{{this.id}}?_method=PUT" method="POST">
-		  		          <input type="hidden" name="devour" value="true">
-		  		          <button class="btn waves-effect waves-light col s4" type="submit" name="action">Devour!
-		  		            <i class="material-icons right">local_dining</i>
-		  		          </button>
-		  		        </form>
-	  		        </div>
-	  		      </li>
-	  		    {{/unless}}
-	  		  {{/each}}
-	  		</ul>
-	  	</div>
-	  	<div class="col s6">
-	  		<ul class="collection">
-	  		  {{#each burgers}}
-	  		    {{#if this.devoured}}
-	  		      <li class="collection-item">
-	  		        <h3>{{this.burger_name}}</h3>
-	  		      </li>
-	  		    {{/if}}
-	  		  {{/each}}
-	  		</ul>
-	  	</div>
-	  </div>
-  	  <div class="divider"></div>
-	  <div class="row">
-	  	<h5 class="center-align">Enter a new burger below</h5>
-	  	<form class="create-update-form" action="/" method="POST">
-        	<div class="input-field col s8">
-	          	<input id="input_text"  name="name" type="text" data-length="50">
-	          	<label for="input_text">Burger Name</label>
-        	</div>
-        	<button class="btn waves-effect waves-light col s4" type="submit" name="action">Submit
-        	  <i class="material-icons right">send</i>
-        	</button>
-    	</form>
-      </div>
+<div class="container">
+    <img class="main-img" src="assets/img/burger-outline-filled.png">
+    <h1 class="center-align">Eat Da Burger!</h1>
+    <div class="row">
+        <div class="col s6">
+            <h5 class="center-align">Burgers To Devour:</h5>
+            <ul class="collection" id="overflow">
+                <li class="collection-item row">
+                    <h6 class="col s4">Burger</h6>
+                    <h6 class="col s4">Customer</h6>
+                    <h6 class="col s4"></h6>
+                </li>
+                {{#each burgers}}
+                    {{#unless this.devoured}}
+                        <li class="collection-item row">
+                            <h4 class="col s4">{{this.burger_name}}</h4>
+                            <form action="/burger/{{this.id}}?_method=PUT" method="POST">
+                                <div class="input-field col s4">
+                                    <select name="customer">
+                                        {{#each ../customers}}
+                                            <option value="{{this.id}}">{{this.customer_name}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                                <button class="btn waves-effect waves-light col s4" type="submit" name="action">Devour!
+                                    <i class="material-icons right">local_dining</i>
+                                </button>
+                            </form>
+                        </li>
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </div>
+        <div class="col s6">
+            <h5 class="center-align">Burgers Devoured:</h5>
+            <ul class="collection">
+                <li class="collection-item row">
+                    <h6 class="col s4">Burger</h6>
+                    <h6 class="col s4">Customer</h6>
+                    <h6 class="col s4"></h6>
+                </li>
+                {{#each burgers}}
+                    {{#if this.devoured}}
+                        <li class="collection-item row">
+                            <h4 class="col s4">{{this.burger_name}}</h4>
+                            <h4 class="col s4">{{this.Customer.dataValues.customer_name}}</h4>
+                            <form action="/burger/{{this.id}}?_method=DELETE" method="POST">
+                                <button class="btn waves-effect waves-light col s4" type="submit" name="action">Delete!
+                                    <i class="material-icons right">clear</i>
+                                </button>
+                            </form>
+                        </li>
+                    {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="row">
+        <div class="col s6">
+            <h5 class="center-align">Enter a new burger below</h5>
+            <form class="create-update-form" action="/burger" method="POST">
+                <div class="input-field col s8">
+                    <input id="input_text"  name="name" type="text" class="validate" data-length="50">
+                    <label for="input_text">Burger Name</label>
+                </div>
+                <button class="btn waves-effect waves-light col s4" type="submit" name="action">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </form>
+        </div>
+        <div class="col s6">
+            <h5 class="center-align">Enter a new customer below</h5>
+            <form class="create-update-form" action="/customer" method="POST">
+                <div class="input-field col s8">
+                    <input id="input_text"  name="name" type="text" class="validate" data-length="50">
+                    <label for="input_text">Customer Name</label>
+                </div>
+                <button class="btn waves-effect waves-light col s4" type="submit" name="action">Submit
+                    <i class="material-icons right">add_circle_outline</i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col s12">
+        <h5 class="center-align">Customers Below:</h5>
+        <ul class="collection">
+            {{#each customers}}
+                <li class="collection-item row">
+                    <h4 class="col s11">{{this.customer_name}}</h4>
+                    <form action="/customer/{{this.id}}?_method=DELETE" method="POST">
+                        <button class="btn waves-effect waves-light col s1" type="submit" name="action">Delete!
+                            <i class="material-icons right">clear</i>
+                        </button>
+                    </form>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
 </div>
